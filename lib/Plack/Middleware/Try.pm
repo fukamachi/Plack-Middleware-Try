@@ -32,7 +32,7 @@ __END__
 
 =head1 NAME
 
-Plack::Middleware::Try - Handle dying an application.
+Plack::Middleware::Try - Handle dying of an application.
 
 =head1 SYNOPSIS
 
