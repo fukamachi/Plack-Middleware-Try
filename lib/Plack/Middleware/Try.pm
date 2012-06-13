@@ -48,7 +48,9 @@ Plack::Middleware::Try - Handle dying an application.
 
 =head1 DESCRIPTION
 
-Generally, when an application dies unexpectedly, it should return 500 Internal Server Error. But some cases like DB execution timeout which doesn't always fail, it could return 503 Service Temporarily Unavailable.
+Plack::Middleware::Try is a Plack Middleware for handling exceptions thrown by an application.
+
+For example, when an application dies unexpectedly, it should return 500 Internal Server Error generally. But some cases like DB execution timeout which doesn't always fail, it could return 503 Service Temporarily Unavailable.
 
 =head1 AUTHOR
 
