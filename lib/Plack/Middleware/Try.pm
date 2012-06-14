@@ -13,17 +13,22 @@ our $VERSION = '0.01';
 sub call {
     my ($self, $env) = @_;
 
-    try {
+    my @caught;
+    my $res = try {
         $self->app->($env);
     }
     Try::Tiny::catch {
-        my $res = $self->catch->(@_);
-        $self->finally->(@_) if $self->finally;
+        my @caught = @_;
+        if ($self->catch) {
+            local $SIG{__DIE__} = 'DEFAULT';
 
-        local $SIG{__DIE__} = 'DEFAULT';
-
-        return $res || die @_;
+            return $self->catch->(@_);
+        }
     };
+
+    $self->finally->(@caught) if $self->finally;
+
+    return $res;
 }
 
 1;
@@ -41,9 +46,11 @@ Plack::Middleware::Try - Handle dying of an application.
          if ($_[0] =~ /Query execution was interrupted/) {
              return [ 503, [ "Content-Type", "text/plain" ], ["Service Temporarily Unavailable"] ];
          }
+
+         die @_;
      },
      finally => sub {
-         warn $_;
+         warn $_[0] if $_[0];
      };
 
 =head1 DESCRIPTION
